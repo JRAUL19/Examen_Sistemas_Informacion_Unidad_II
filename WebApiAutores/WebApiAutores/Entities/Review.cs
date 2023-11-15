@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebApiAutores.Entities
 {
-    [Table("reviews")]
+    [Table("reviews", Schema = "transaccional")]
     public class Review
     {
         [Column("id")]

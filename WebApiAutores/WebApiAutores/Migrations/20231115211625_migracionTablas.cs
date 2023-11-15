@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace WebApiAutores.Migrations
 {
     /// <inheritdoc />
-    public partial class migracionReviews : Migration
+    public partial class migracionTablas : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -214,7 +214,7 @@ namespace WebApiAutores.Migrations
 
             migrationBuilder.CreateTable(
                 name: "reviews",
-                schema: "Security",
+                schema: "transaccional",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "int", nullable: false)
@@ -240,7 +240,7 @@ namespace WebApiAutores.Migrations
 
             migrationBuilder.CreateTable(
                 name: "comentarios",
-                schema: "Security",
+                schema: "transaccional",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "int", nullable: false)
@@ -257,13 +257,13 @@ namespace WebApiAutores.Migrations
                     table.ForeignKey(
                         name: "FK_comentarios_comentarios_comentario_id",
                         column: x => x.comentario_id,
-                        principalSchema: "Security",
+                        principalSchema: "transaccional",
                         principalTable: "comentarios",
                         principalColumn: "id");
                     table.ForeignKey(
                         name: "FK_comentarios_reviews_valoracion_id",
                         column: x => x.valoracion_id,
-                        principalSchema: "Security",
+                        principalSchema: "transaccional",
                         principalTable: "reviews",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
@@ -284,19 +284,19 @@ namespace WebApiAutores.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_comentarios_comentario_id",
-                schema: "Security",
+                schema: "transaccional",
                 table: "comentarios",
                 column: "comentario_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_comentarios_valoracion_id",
-                schema: "Security",
+                schema: "transaccional",
                 table: "comentarios",
                 column: "valoracion_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_reviews_book_id",
-                schema: "Security",
+                schema: "transaccional",
                 table: "reviews",
                 column: "book_id");
 
@@ -352,7 +352,7 @@ namespace WebApiAutores.Migrations
         {
             migrationBuilder.DropTable(
                 name: "comentarios",
-                schema: "Security");
+                schema: "transaccional");
 
             migrationBuilder.DropTable(
                 name: "roles_claims",
@@ -376,7 +376,7 @@ namespace WebApiAutores.Migrations
 
             migrationBuilder.DropTable(
                 name: "reviews",
-                schema: "Security");
+                schema: "transaccional");
 
             migrationBuilder.DropTable(
                 name: "roles",

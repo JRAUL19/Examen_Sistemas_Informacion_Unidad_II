@@ -4,7 +4,7 @@ using System.Net;
 
 namespace WebApiAutores.Entities
 {
-    [Table("comentarios")]
+    [Table("comentarios", Schema = "transaccional")]
     public class Comentarios
     {
         [Column("id")]

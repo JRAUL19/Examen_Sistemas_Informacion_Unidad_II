@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using WebApiAutores.Dtos.Autores;
 using WebApiAutores.Dtos.Book;
+using WebApiAutores.Dtos.Comentarios;
 using WebApiAutores.Entities;
 
 namespace WebApiAutores.Helpers
@@ -11,6 +12,7 @@ namespace WebApiAutores.Helpers
         {
             MapsForBooks();    
             MapsForAutores();
+            MapsForComentarios();
         }
 
         private void MapsForAutores()
@@ -18,6 +20,12 @@ namespace WebApiAutores.Helpers
             CreateMap<Autor, AutorDto>();
             CreateMap<Autor, AutorGetByIdDto>();
             CreateMap<AutorCreateDto, Autor>();
+        }
+
+        private void MapsForComentarios()
+        {
+            CreateMap<ComentariosCreateDto, Comentarios>();
+            CreateMap<Comentarios, ComentariosDto>();
         }
 
         private void MapsForBooks()

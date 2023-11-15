@@ -12,8 +12,8 @@ using WebApiAutores.Entities;
 namespace WebApiAutores.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231115175221_migracionReviews")]
-    partial class migracionReviews
+    [Migration("20231115211625_migracionTablas")]
+    partial class migracionTablas
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -317,7 +317,7 @@ namespace WebApiAutores.Migrations
 
                     b.HasIndex("ValoracionId");
 
-                    b.ToTable("comentarios", "Security");
+                    b.ToTable("comentarios", "transaccional");
                 });
 
             modelBuilder.Entity("WebApiAutores.Entities.Review", b =>
@@ -359,7 +359,7 @@ namespace WebApiAutores.Migrations
 
                     b.HasIndex("BookId");
 
-                    b.ToTable("reviews", "Security");
+                    b.ToTable("reviews", "transaccional");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

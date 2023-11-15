@@ -38,6 +38,8 @@ namespace WebApiAutores
 
             services.AddTransient<MiFiltro>();
             services.AddTransient<IEmailSenderService, EmailSenderService>();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
             services.AddAutoMapper(typeof(Startup));
             
             // Add Identity
@@ -67,6 +69,9 @@ namespace WebApiAutores
                         (Encoding.UTF8.GetBytes(Configuration["JWT:Secret"]))
                 };
             });
+            
+
+            services.AddHttpContextAccessor();
 
             // Add Chache Filter
             services.AddResponseCaching();

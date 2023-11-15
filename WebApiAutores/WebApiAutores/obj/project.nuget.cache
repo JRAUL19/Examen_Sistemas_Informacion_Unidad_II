@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "cb2TzJUrGHtO5o3+BiyUKDb30UpR8iMYdMs4wRXBvs3LUZAvWFGiyiZSgP6tj0F7p8AfkppgAVzqIS3IjMadbA==",
+  "dgSpecHash": "wUFWZrI1HwVuENEhf42jNOivxCfo9nerDuaWdTJP2/LCjFW0zwtUM0EoSCuxaT5q6Oyb55OF5bRSHq90mlnZBw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\USER\\Desktop\\Sistemas de informacion\\pac3-2023-sif\\unidad1\\WebApiAutores\\WebApiAutores\\WebApiAutores.csproj",
+  "projectFilePath": "C:\\Users\\USER\\Desktop\\Examen_Sistemas_Informacion_Unidad_II\\WebApiAutores\\WebApiAutores\\WebApiAutores.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\USER\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
     "C:\\Users\\USER\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.1\\automapper.extensions.microsoft.dependencyinjection.12.0.1.nupkg.sha512",

@@ -12,8 +12,8 @@ using WebApiAutores.Entities;
 namespace WebApiAutores.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231102024356_AddIdentity")]
-    partial class AddIdentity
+    [Migration("20231115175221_migracionReviews")]
+    partial class migracionReviews
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -281,6 +281,87 @@ namespace WebApiAutores.Migrations
                     b.ToTable("books", "transaccional");
                 });
 
+            modelBuilder.Entity("WebApiAutores.Entities.Comentarios", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Comentario")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("comentario");
+
+                    b.Property<int?>("ComentarioId")
+                        .HasColumnType("int")
+                        .HasColumnName("comentario_id");
+
+                    b.Property<DateTime>("Fecha")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("fecha");
+
+                    b.Property<string>("Usuario")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("usuario");
+
+                    b.Property<int>("ValoracionId")
+                        .HasColumnType("int")
+                        .HasColumnName("valoracion_id");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ComentarioId");
+
+                    b.HasIndex("ValoracionId");
+
+                    b.ToTable("comentarios", "Security");
+                });
+
+            modelBuilder.Entity("WebApiAutores.Entities.Review", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<Guid>("BookId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("book_id");
+
+                    b.Property<string>("Comentario")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)")
+                        .HasColumnName("comentario");
+
+                    b.Property<DateTime>("Fecha")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("fecha");
+
+                    b.Property<decimal>("Promedio")
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("promedio");
+
+                    b.Property<int>("Puntuacion")
+                        .HasColumnType("int")
+                        .HasColumnName("puntuacion");
+
+                    b.Property<string>("Usuario")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("usuario");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BookId");
+
+                    b.ToTable("reviews", "Security");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -341,6 +422,34 @@ namespace WebApiAutores.Migrations
                         .IsRequired();
 
                     b.Navigation("Autor");
+                });
+
+            modelBuilder.Entity("WebApiAutores.Entities.Comentarios", b =>
+                {
+                    b.HasOne("WebApiAutores.Entities.Comentarios", "fk_Comentarios")
+                        .WithMany()
+                        .HasForeignKey("ComentarioId");
+
+                    b.HasOne("WebApiAutores.Entities.Review", "fk_Review")
+                        .WithMany()
+                        .HasForeignKey("ValoracionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("fk_Comentarios");
+
+                    b.Navigation("fk_Review");
+                });
+
+            modelBuilder.Entity("WebApiAutores.Entities.Review", b =>
+                {
+                    b.HasOne("WebApiAutores.Entities.Book", "Book")
+                        .WithMany()
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Book");
                 });
 
             modelBuilder.Entity("WebApiAutores.Entities.Autor", b =>

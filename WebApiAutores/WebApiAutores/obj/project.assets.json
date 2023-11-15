@@ -3824,11 +3824,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\USER\\Desktop\\Sistemas de informacion\\pac3-2023-sif\\unidad1\\WebApiAutores\\WebApiAutores\\WebApiAutores.csproj",
+      "projectUniqueName": "C:\\Users\\USER\\Desktop\\Examen_Sistemas_Informacion_Unidad_II\\WebApiAutores\\WebApiAutores\\WebApiAutores.csproj",
       "projectName": "WebApiAutores",
-      "projectPath": "C:\\Users\\USER\\Desktop\\Sistemas de informacion\\pac3-2023-sif\\unidad1\\WebApiAutores\\WebApiAutores\\WebApiAutores.csproj",
+      "projectPath": "C:\\Users\\USER\\Desktop\\Examen_Sistemas_Informacion_Unidad_II\\WebApiAutores\\WebApiAutores\\WebApiAutores.csproj",
       "packagesPath": "C:\\Users\\USER\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\USER\\Desktop\\Sistemas de informacion\\pac3-2023-sif\\unidad1\\WebApiAutores\\WebApiAutores\\obj\\",
+      "outputPath": "C:\\Users\\USER\\Desktop\\Examen_Sistemas_Informacion_Unidad_II\\WebApiAutores\\WebApiAutores\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

@@ -31,5 +31,7 @@ namespace WebApiAutores.Entities
 
         public DbSet<Autor> Autores { get; set; }
         public DbSet<Book> Books { get; set; }
+        public DbSet<Comentarios> Comentarios { get; set; }
+        public DbSet<Review> Reviews { get; set; }
     }
 }

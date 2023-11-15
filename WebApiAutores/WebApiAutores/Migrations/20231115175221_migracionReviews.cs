@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace WebApiAutores.Migrations
 {
     /// <inheritdoc />
-    public partial class AddIdentity : Migration
+    public partial class migracionReviews : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -212,6 +212,63 @@ namespace WebApiAutores.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "reviews",
+                schema: "Security",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    puntuacion = table.Column<int>(type: "int", nullable: false),
+                    comentario = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    promedio = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    usuario = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    fecha = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    book_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_reviews", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_reviews_books_book_id",
+                        column: x => x.book_id,
+                        principalSchema: "transaccional",
+                        principalTable: "books",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "comentarios",
+                schema: "Security",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    comentario = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    usuario = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    fecha = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    valoracion_id = table.Column<int>(type: "int", nullable: false),
+                    comentario_id = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_comentarios", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_comentarios_comentarios_comentario_id",
+                        column: x => x.comentario_id,
+                        principalSchema: "Security",
+                        principalTable: "comentarios",
+                        principalColumn: "id");
+                    table.ForeignKey(
+                        name: "FK_comentarios_reviews_valoracion_id",
+                        column: x => x.valoracion_id,
+                        principalSchema: "Security",
+                        principalTable: "reviews",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_books_autor_id",
                 schema: "transaccional",
@@ -224,6 +281,24 @@ namespace WebApiAutores.Migrations
                 table: "books",
                 column: "isbn",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_comentarios_comentario_id",
+                schema: "Security",
+                table: "comentarios",
+                column: "comentario_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_comentarios_valoracion_id",
+                schema: "Security",
+                table: "comentarios",
+                column: "valoracion_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_reviews_book_id",
+                schema: "Security",
+                table: "reviews",
+                column: "book_id");
 
             migrationBuilder.CreateIndex(
                 name: "RoleNameIndex",
@@ -276,8 +351,8 @@ namespace WebApiAutores.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "books",
-                schema: "transaccional");
+                name: "comentarios",
+                schema: "Security");
 
             migrationBuilder.DropTable(
                 name: "roles_claims",
@@ -300,8 +375,8 @@ namespace WebApiAutores.Migrations
                 schema: "Security");
 
             migrationBuilder.DropTable(
-                name: "autores",
-                schema: "transaccional");
+                name: "reviews",
+                schema: "Security");
 
             migrationBuilder.DropTable(
                 name: "roles",
@@ -310,6 +385,14 @@ namespace WebApiAutores.Migrations
             migrationBuilder.DropTable(
                 name: "users",
                 schema: "Security");
+
+            migrationBuilder.DropTable(
+                name: "books",
+                schema: "transaccional");
+
+            migrationBuilder.DropTable(
+                name: "autores",
+                schema: "transaccional");
         }
     }
 }

@@ -1,15 +1,11 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using WebApiAutores.Dtos;
-using WebApiAutores.Dtos.Autores;
-using WebApiAutores.Dtos.Book;
 using WebApiAutores.Dtos.Comentarios;
 using WebApiAutores.Entities;
-using WebApiAutores.Services;
 
 namespace WebApiAutores.Controllers
 {
@@ -82,10 +78,17 @@ namespace WebApiAutores.Controllers
                 return BadRequest("Error en la petición");
             }
 
+            //Obtener el email
             var userEmail = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
 
-            // Asignar el email del usuario al campo "Usuario" del DTO
+            // Asignar el email campo "Usuario"
             dto.Usuario = userEmail;
+
+            //validar palabras ofensivas
+            if (ContienePalabrasOfensivas(dto.Comentario))
+            {
+                return BadRequest("El comentario contiene palabras ofensivas. Por favor, modifícalo.");
+            }
 
             var comentario = _mapper.Map<Comentarios>(dto);
 
@@ -134,6 +137,12 @@ namespace WebApiAutores.Controllers
             var userEmail = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
 
             dto.Usuario = userEmail;
+
+            //validar palabras ofensivas
+            if (ContienePalabrasOfensivas(dto.Comentario))
+            {
+                return BadRequest("El comentario contiene palabras ofensivas. Por favor, modifícalo.");
+            }
 
             var valoracionExiste = await _context.Autores
                 .AnyAsync(x => x.Id == dto.ValoracionId);
@@ -184,6 +193,24 @@ namespace WebApiAutores.Controllers
                 Status = true,
                 Message = "comentario borrado correctamente"
             });
+        }
+
+        // validacion de palabras ofensivas 
+        private bool ContienePalabrasOfensivas(string contenido)
+        {
+            var palabrasOfensivas = new string[] { "idiota", "lerdo", "mameluco", "mentecato", "pazguato", 
+                "imbécil", "retrasado", "estúpido", "loco", "subnormal", "deficiente", "cenutrio", "zoquete",
+                "analfabeto", "ignorante", "sinvergüenza", "ladrón"}; 
+            
+            foreach (var palabra in palabrasOfensivas)
+            {
+                if (contenido != null && contenido.Contains(palabra, StringComparison.OrdinalIgnoreCase)) 
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }

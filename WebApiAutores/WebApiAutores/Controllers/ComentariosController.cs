@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using WebApiAutores.Dtos;
+using WebApiAutores.Dtos.Autores;
+using WebApiAutores.Dtos.Book;
 using WebApiAutores.Dtos.Comentarios;
 using WebApiAutores.Entities;
 using WebApiAutores.Services;
@@ -87,12 +89,10 @@ namespace WebApiAutores.Controllers
 
             var comentario = _mapper.Map<Comentarios>(dto);
 
-            // Verifica si el comentario tiene un comentario secundario asociado
             if (dto.ComentarioId.HasValue)
             {
                 var comentarioPrincipal = await _context.Comentarios.FindAsync(dto.ComentarioId.Value);
 
-                // Si el comentario padre existe, asócialo
                 if (comentarioPrincipal != null)
                 {
                     comentario.fk_Comentarios = comentarioPrincipal;
@@ -116,6 +116,74 @@ namespace WebApiAutores.Controllers
             });
         }
 
+        //Editar comentario
+        [HttpPut("{id}")]
+        public async Task<ActionResult<ResponseDto<ComentariosDto>>> Put(ComentariosUpdateDto dto, int id)
+        {
+            var comentarioDb = await _context.Comentarios.FirstOrDefaultAsync(x => x.Id == id);
 
+            if (comentarioDb is null)
+            {
+                return NotFound(new ResponseDto<ComentariosDto>
+                {
+                    Status = false,
+                    Message = $"No existe el comentario: {id}"
+                });
+            }
+
+            var userEmail = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+
+            dto.Usuario = userEmail;
+
+            var valoracionExiste = await _context.Autores
+                .AnyAsync(x => x.Id == dto.ValoracionId);
+
+            if (!valoracionExiste)
+            {
+                return NotFound(new ResponseDto<ComentariosDto>
+                {
+                    Status = false,
+                    Message = $"No existe la Review: {dto.ValoracionId}"
+                });
+            }
+
+            _mapper.Map<ComentariosUpdateDto, Comentarios>(dto, comentarioDb);
+
+            _context.Update(comentarioDb);
+
+            await _context.SaveChangesAsync();
+
+            var comentarioDto = _mapper.Map<ComentariosDto>(comentarioDb);
+            return StatusCode(StatusCodes.Status202Accepted, new ResponseDto<ComentariosDto>
+            {
+                Status = true,
+                Message = "Comentario Actualizado correctamente",
+                Data = comentarioDto
+            });
+        }
+
+        //Borrar comentarios
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var comentario = await _context.Comentarios.FirstOrDefaultAsync(a => a.Id == id);
+            if (comentario is null)
+            {
+                return NotFound(new ResponseDto<ComentariosDto>
+                {
+                    Status = false,
+                    Message = $"El comentario con el Id {id} no fue encontrado"
+                });
+            }
+
+            _context.Remove(comentario);
+            await _context.SaveChangesAsync();
+
+            return Ok(new ResponseDto<string>
+            {
+                Status = true,
+                Message = "comentario borrado correctamente"
+            });
+        }
     }
 }

@@ -68,6 +68,7 @@ namespace WebApiAutores.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<ActionResult> Post(BookCreateDto dto)
         {
             if (!ModelState.IsValid)

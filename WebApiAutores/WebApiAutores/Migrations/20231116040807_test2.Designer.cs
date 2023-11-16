@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApiAutores.Entities;
 
@@ -11,9 +12,11 @@ using WebApiAutores.Entities;
 namespace WebApiAutores.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231116040807_test2")]
+    partial class test2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -268,10 +271,6 @@ namespace WebApiAutores.Migrations
                         .HasColumnType("nvarchar(50)")
                         .HasColumnName("title");
 
-                    b.Property<double>("Valoracion")
-                        .HasColumnType("float")
-                        .HasColumnName("valoracion");
-
                     b.HasKey("Id");
 
                     b.HasIndex("AutorId");
@@ -344,8 +343,12 @@ namespace WebApiAutores.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("fecha");
 
-                    b.Property<double>("Puntuacion")
-                        .HasColumnType("float")
+                    b.Property<decimal>("Promedio")
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("promedio");
+
+                    b.Property<int>("Puntuacion")
+                        .HasColumnType("int")
                         .HasColumnName("puntuacion");
 
                     b.Property<string>("Usuario")

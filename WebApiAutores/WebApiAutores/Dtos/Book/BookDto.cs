@@ -16,6 +16,9 @@ namespace WebApiAutores.Dtos.Book
 
         public int AutorId { get; set; }
 
+        [DisplayFormat(DataFormatString = "{0:0.0}", ApplyFormatInEditMode = true)]
+        public double Valoracion { get; set; }
+
         public string AutorNombre { get; set; }
 
     }

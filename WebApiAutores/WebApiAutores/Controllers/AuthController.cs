@@ -34,7 +34,7 @@ namespace WebApiAutores.Controllers
             this._emailSenderService = emailSenderService;
         }
 
-        [HttpPost("Login")] // /auth/login
+        [HttpPost("Login")] 
         public async Task<ActionResult<ResponseDto<LoginResponseDto>>> Login(LoginDto dto)
         {
             var result = await _signInManager
@@ -69,8 +69,8 @@ namespace WebApiAutores.Controllers
                     Token = new JwtSecurityTokenHandler().WriteToken(jwtToken)
                 };
 
-                await _emailSenderService.SendEmailAsync(user.Email, "WebApiAutores -- Incio de sesion",
-                    EmailTemplates.LoginTemplate(user.Email));
+                //await _emailSenderService.SendEmailAsync(user.Email, "WebApiAutores -- Incio de sesion",
+                    //EmailTemplates.LoginTemplate(user.Email));
 
                 return Ok(new ResponseDto<LoginResponseDto>
                 {

@@ -28,6 +28,10 @@ namespace WebApiAutores.Entities
         [Column("autor_id")]
         public int AutorId { get; set; }
 
+        [Column("valoracion")]
+        
+        public double Valoracion {  get; set; }
+
         [ForeignKey(nameof(AutorId))]
         public virtual Autor Autor { get; set; }
 

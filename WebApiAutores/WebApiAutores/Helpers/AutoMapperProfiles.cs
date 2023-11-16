@@ -2,6 +2,7 @@
 using WebApiAutores.Dtos.Autores;
 using WebApiAutores.Dtos.Book;
 using WebApiAutores.Dtos.Comentarios;
+using WebApiAutores.Dtos.Reviews;
 using WebApiAutores.Entities;
 
 namespace WebApiAutores.Helpers
@@ -10,9 +11,10 @@ namespace WebApiAutores.Helpers
     {
         public AutoMapperProfiles()
         {
-            MapsForBooks();    
+            MapsForBooks();
             MapsForAutores();
             MapsForComentarios();
+            MapsForReviews();
         }
 
         private void MapsForAutores()
@@ -20,6 +22,14 @@ namespace WebApiAutores.Helpers
             CreateMap<Autor, AutorDto>();
             CreateMap<Autor, AutorGetByIdDto>();
             CreateMap<AutorCreateDto, Autor>();
+        }
+
+        private void MapsForReviews()
+        {
+            CreateMap<ReviewCreateDto, Review>();
+            CreateMap<Review, ReviewDto>();
+            CreateMap<Review, ReviewDto>()
+                .ForPath(dest => dest.BookName, opt => opt.MapFrom(src => src.Book.Title));
         }
 
         private void MapsForComentarios()
@@ -41,3 +51,4 @@ namespace WebApiAutores.Helpers
 
     }
 }
+

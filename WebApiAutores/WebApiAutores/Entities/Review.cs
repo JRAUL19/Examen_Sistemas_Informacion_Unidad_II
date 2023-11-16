@@ -12,15 +12,13 @@ namespace WebApiAutores.Entities
 
         [Column("puntuacion")]
         [Required]
-        public int Puntuacion { get; set; }
+        public double Puntuacion { get; set; }
 
         [Column("comentario")]
         [StringLength(200)]
         [Required]
         public string Comentario { get; set; }
 
-        [Column("promedio")]
-        public decimal Promedio { get; set; }
 
         [Column("usuario")]
         public string Usuario { get; set; }

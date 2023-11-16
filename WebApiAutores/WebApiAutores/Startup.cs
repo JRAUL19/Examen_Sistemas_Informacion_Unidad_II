@@ -41,7 +41,9 @@ namespace WebApiAutores
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddAutoMapper(typeof(Startup));
-            
+
+
+
             // Add Identity
             services.AddIdentity<IdentityUser, IdentityRole>( options =>
             {

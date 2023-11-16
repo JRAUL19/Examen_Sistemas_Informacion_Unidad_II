@@ -31,6 +31,7 @@ namespace WebApiAutores.Controllers
 
         //obtener todos los comentarios
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<ResponseDto<IReadOnlyList<ComentariosDto>>>> Get()
         {
             var comentariosDb = await _context.Comentarios.ToListAsync();
@@ -46,6 +47,7 @@ namespace WebApiAutores.Controllers
 
         //Obtener por id
         [HttpGet("{id:int}")]
+        [AllowAnonymous]
         public async Task<ActionResult<ResponseDto<ComentariosDto>>> GetById(int id)
         {
             var comentarioDb = await _context.Comentarios
@@ -88,16 +90,16 @@ namespace WebApiAutores.Controllers
             // Verifica si el comentario tiene un comentario secundario asociado
             if (dto.ComentarioId.HasValue)
             {
-                var comentarioPadre = await _context.Comentarios.FindAsync(dto.ComentarioId.Value);
+                var comentarioPrincipal = await _context.Comentarios.FindAsync(dto.ComentarioId.Value);
 
                 // Si el comentario padre existe, asócialo
-                if (comentarioPadre != null)
+                if (comentarioPrincipal != null)
                 {
-                    comentario.fk_Comentarios = comentarioPadre;
+                    comentario.fk_Comentarios = comentarioPrincipal;
                 }
                 else
                 {
-                    return BadRequest("El comentario padre no existe.");
+                    return BadRequest("El comentario no existe.");
                 }
             }
 

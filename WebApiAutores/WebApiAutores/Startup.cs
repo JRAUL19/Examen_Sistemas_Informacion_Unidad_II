@@ -91,15 +91,7 @@ namespace WebApiAutores
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger)  
-        {
-            //app.Map("/semitas", app => 
-            //{
-            //    app.Run(async contexto =>
-            //    {
-            //        await contexto.Response
-            //        .WriteAsync("Interceptando la pipeline de procesos");
-            //    });
-            //});            
+        {    
 
             app.UseLogginResponseHttp();
 

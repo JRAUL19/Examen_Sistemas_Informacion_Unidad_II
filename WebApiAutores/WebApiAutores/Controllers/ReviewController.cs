@@ -69,6 +69,12 @@ namespace WebApiAutores.Controllers
                 }
             }
 
+            //Identificar lenguaje ofesivo en comentario de review
+            if (ContienePalabrasOfensivas(dto.Comentario))
+            {
+                return BadRequest("El comentario contiene palabras ofensivas. Por favor, modifícalo.");
+            }
+
             //Mapeo de datos
             var userEmail = HttpContext.User.Claims.FirstOrDefault
                 (c => c.Type == ClaimTypes.Email)?.Value;
@@ -141,6 +147,7 @@ namespace WebApiAutores.Controllers
         [HttpPut("{id:int}")]
         public async Task<ActionResult<ResponseDto<ReviewDto>>> Put(ReviewUpdateDto dto, int id)
         {
+            //Verificar que review existe
             var reviewDB = await _context.Reviews.FirstOrDefaultAsync(x => x.Id == id);
 
             if (reviewDB is null)
@@ -164,14 +171,20 @@ namespace WebApiAutores.Controllers
                 });
             }
 
-            _mapper.Map<ReviewUpdateDto, Review>(dto, reviewDB);
+            //Identificar lenguaje ofesivo en comentario de review
+            if (ContienePalabrasOfensivas(dto.Comentario))
+            {
+                return BadRequest("El comentario contiene palabras ofensivas. Por favor, modifícalo.");
+            }
 
+            //Mapeo de datos
+            _mapper.Map<ReviewUpdateDto, Review>(dto, reviewDB);
             _context.Update(reviewDB);
 
             await _context.SaveChangesAsync();
-
             var reviewDto = _mapper.Map<ReviewDto>(reviewDB);
 
+            //Calcular promedios
             await RecalcularAvgReview(dto.BookId);
 
             return Ok(new ResponseDto<ReviewDto>
@@ -184,31 +197,73 @@ namespace WebApiAutores.Controllers
 
 
         //Eliminar Review
-
-        //Calculo de promedio
-        private async Task RecalcularAvgReview(Guid bookId)
+        [HttpDelete("{id:int}")]
+        public async Task<ActionResult<ResponseDto<string>>> Delete(int id)
         {
-            var reviews = await _context.Reviews
-                .Where(r => r.BookId == bookId)
-                .Select(r => r.Puntuacion)
-                .ToListAsync();
+            var reviewExist = await _context.Reviews.AnyAsync(x => x.Id == id);
 
-            var book = await _context.Books.FindAsync(bookId);
-
-            if (book != null)
+            if (!reviewExist)
             {
-                if (reviews.Any())
+                return NotFound(new ResponseDto<ReviewDto>
                 {
-                    double promedio = reviews.Average();
-                    book.Valoracion = Math.Round(promedio, 1);
-                }
-                else
-                {
-                    book.Valoracion = 0; // No hay valoraciones, promedio a cero
-                }
-
-                await _context.SaveChangesAsync();
+                    Status = false,
+                    Message = $"La review: {id} no existe"
+                });
             }
+
+            _context.Remove(new Review { Id = id });
+            await _context.SaveChangesAsync();
+
+            return Ok(new ResponseDto<string>
+            {
+                Status = true,
+                Message = "Review eliminada correctamente"
+            });
+        }
+
+
+            //Calculo de promedio
+            private async Task RecalcularAvgReview(Guid bookId)
+            {
+                var reviews = await _context.Reviews
+                    .Where(r => r.BookId == bookId)
+                    .Select(r => r.Puntuacion)
+                    .ToListAsync();
+
+                var book = await _context.Books.FindAsync(bookId);
+
+                if (book != null)
+                {
+                    if (reviews.Any())
+                    {
+                        double promedio = reviews.Average();
+                        book.Valoracion = Math.Round(promedio, 1);
+                    }
+                    else
+                    {
+                        book.Valoracion = 0;
+                    }
+
+                    await _context.SaveChangesAsync();
+                }
+            }
+
+        //Validacion de palabras ofensivas 
+        private bool ContienePalabrasOfensivas(string contenido)
+        {
+            var palabrasOfensivas = new string[] { "idiota", "lerdo", "mameluco", "mentecato", "pazguato",
+                "imbécil", "retrasado", "estúpido", "loco", "subnormal", "deficiente", "cenutrio", "zoquete",
+                "analfabeto", "ignorante", "sinvergüenza", "ladrón"};
+
+            foreach (var palabra in palabrasOfensivas)
+            {
+                if (contenido != null && contenido.Contains(palabra, StringComparison.OrdinalIgnoreCase))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }

@@ -293,7 +293,8 @@ namespace WebApiAutores.Migrations
 
                     b.Property<string>("Comentario")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)")
                         .HasColumnName("comentario");
 
                     b.Property<int?>("ComentarioId")

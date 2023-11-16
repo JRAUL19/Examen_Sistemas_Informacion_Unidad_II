@@ -12,8 +12,8 @@ using WebApiAutores.Entities;
 namespace WebApiAutores.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231116040807_test2")]
-    partial class test2
+    [Migration("20231116185917_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -271,6 +271,10 @@ namespace WebApiAutores.Migrations
                         .HasColumnType("nvarchar(50)")
                         .HasColumnName("title");
 
+                    b.Property<double>("Valoracion")
+                        .HasColumnType("float")
+                        .HasColumnName("valoracion");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AutorId");
@@ -292,7 +296,8 @@ namespace WebApiAutores.Migrations
 
                     b.Property<string>("Comentario")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)")
                         .HasColumnName("comentario");
 
                     b.Property<int?>("ComentarioId")
@@ -343,12 +348,8 @@ namespace WebApiAutores.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("fecha");
 
-                    b.Property<decimal>("Promedio")
-                        .HasColumnType("decimal(18,2)")
-                        .HasColumnName("promedio");
-
-                    b.Property<int>("Puntuacion")
-                        .HasColumnType("int")
+                    b.Property<double>("Puntuacion")
+                        .HasColumnType("float")
                         .HasColumnName("puntuacion");
 
                     b.Property<string>("Usuario")

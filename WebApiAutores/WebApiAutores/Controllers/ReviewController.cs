@@ -13,6 +13,7 @@ namespace WebApiAutores.Controllers
 {
     [Route("api/reviews")]
     [ApiController]
+    [Authorize]
     public class ReviewController : ControllerBase
     {
         //Configuraciones
@@ -101,6 +102,7 @@ namespace WebApiAutores.Controllers
 
         //Obtener Reviews
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<ResponseDto<IReadOnlyList<ReviewDto>>>> get()
         {
             var reviewDb = await _context.Reviews
@@ -119,6 +121,7 @@ namespace WebApiAutores.Controllers
 
         //Obtener Reviews por Id
         [HttpGet("{id:int}")]
+        [AllowAnonymous]
         public async Task<ActionResult<ResponseDto<ReviewDto>>> Get(int id)
         {
             var reviewDb = await _context.Reviews
@@ -145,6 +148,7 @@ namespace WebApiAutores.Controllers
 
         //Editar Review
         [HttpPut("{id:int}")]
+        
         public async Task<ActionResult<ResponseDto<ReviewDto>>> Put(ReviewUpdateDto dto, int id)
         {
             //Verificar que review existe
@@ -176,10 +180,16 @@ namespace WebApiAutores.Controllers
             {
                 return BadRequest("El comentario contiene palabras ofensivas. Por favor, modifícalo.");
             }
+            //Mapeo de datos
+            var userEmail = HttpContext.User.Claims.FirstOrDefault
+                (c => c.Type == ClaimTypes.Email)?.Value;
 
             //Mapeo de datos
-            _mapper.Map<ReviewUpdateDto, Review>(dto, reviewDB);
+            var review = _mapper.Map<ReviewUpdateDto, Review>(dto, reviewDB);
             _context.Update(reviewDB);
+
+            review.Fecha = DateTime.Now;
+            review.Usuario = userEmail;
 
             await _context.SaveChangesAsync();
             var reviewDto = _mapper.Map<ReviewDto>(reviewDB);

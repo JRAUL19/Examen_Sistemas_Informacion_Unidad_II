@@ -12,6 +12,7 @@ namespace WebApiAutores.Entities
         public int Id { get; set; }
 
         [Column("comentario")]
+        [StringLength(200)]
         [Required]
         public string Comentario { get; set; }
 
